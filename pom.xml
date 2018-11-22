@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>cin-b010</groupId>
+	<version>1.0-SNAPSHOT</version>
+	<name>GlobalSign Token jarsigner</name>
+	<artifactId>GST-jarsigner</artifactId>
+	<description>jarsigner da utilizzare con token Global Sign</description>
+
+	<parent>
+		<groupId>cin-maven</groupId>
+		<artifactId>maven-parent-project</artifactId>
+		<version>2.0</version>
+	</parent>
+	<properties>
+		<scm.repository>sit-libs</scm.repository>
+	</properties>
+	<scm>
+		<connection>scm:git:git@gitlab.cineca.it:${scm.repository}/${project.artifactId}.git</connection>
+	</scm>
+	<dependencies>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcpkix-jdk15on</artifactId>
+			<version>1.60</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-cli</groupId>
+			<artifactId>commons-cli</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.xipki.iaik</groupId>
+			<artifactId>sunpkcs11-wrapper</artifactId>
+			<version>1.4.2</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
+				<executions>
+					<execution>
+						<id>default-compile</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+						<configuration>
+							<source>1.8</source>
+							<target>1.8</target>
+						</configuration>
+					</execution>
+					<execution>
+						<id>default-testCompile</id>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>testCompile</goal>
+						</goals>
+						<configuration>
+							<source>1.7</source>
+							<target>1.7</target>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<!-- It creates the correct manifest -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<archive>
+						<index>true</index>
+						<manifestEntries>
+							<Build-Jdk>${java.version}</Build-Jdk>
+							<Built-By>Sit Team</Built-By>
+							<Implementation-Vendor>Cineca</Implementation-Vendor>
+							<Implementation-Version>${project.version}</Implementation-Version>
+							<Main-Class>org.gstjs.sign.SignJar</Main-Class>
+						</manifestEntries>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.3</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<createDependencyReducedPom>false</createDependencyReducedPom>
+							<filters>
+								<filter>
+									<artifact>org.bouncycastle:bcpkix-jdk15on</artifact>
+									<excludes>
+										<exclude>META-INF/*.SF</exclude>
+										<exclude>META-INF/*.RSA</exclude>
+										<exclude>META-INF/*.DSA</exclude>
+										<exclude>META-INF/*.INF</exclude>
+									</excludes>
+								</filter>
+								<filter>
+									<artifact>commons-cli:commons-cli</artifact>
+									<excludes>
+										<exclude>META-INF/*.SF</exclude>
+										<exclude>META-INF/*.RSA</exclude>
+										<exclude>META-INF/*.DSA</exclude>
+										<exclude>META-INF/*.INF</exclude>
+									</excludes>
+								</filter>
+								<filter>
+									<artifact>*:*</artifact>
+									<excludes>
+										<exclude>META-INF/*.SF</exclude>
+										<exclude>META-INF/*.RSA</exclude>
+										<exclude>META-INF/*.DSA</exclude>
+										<exclude>META-INF/*.INF</exclude>
+									</excludes>
+								</filter>
+							</filters>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jarsigner-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>Sign with ConfirmaCodeSign</id>
+						<configuration>
+							<keystore>${keystore-path}/confirma2016.jks</keystore>
+							<alias>confirma2016</alias>
+							<storepass>${confirma-pwd-2016}</storepass>
+							<jarPath>${project.build.directory}/${project.build.finalName}.jar</jarPath>
+							<signedjar>${project.build.directory}/${project.build.finalName}.jar</signedjar>
+							<tsa>http://timestamp.comodoca.com/authenticode</tsa>
+							<verify>true</verify>
+							<verbose>true</verbose>
+						</configuration>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+						<phase>package</phase>
+					</execution>
+					<!-- <execution> <id>Sign with ConfirmaCodeSign GlobalSign</id> <configuration> 
+						<keystore>NONE</keystore> <storetype>PKCS11</storetype> <storepass>${confirmatoken-pwd-2018}</storepass> 
+						<alias>"te-b50f3d2d-0cb5-4a31-a102-128b84e8406e"</alias> <tsa>http://rfc3161timestamp.globalsign.com/advanced</tsa> 
+						<providerClass>sun.security.pkcs11.SunPKCS11</providerClass> <providerArg>${confirmatoken-configurationfile}</providerArg> 
+						<jarPath>${project.build.directory}/${project.build.finalName}.jar</jarPath> 
+						<signedjar>${project.build.directory}/${project.build.finalName}.jar</signedjar> 
+						<verify>true</verify> <verbose>true</verbose> </configuration> <goals> <goal>sign</goal> 
+						</goals> <phase>package</phase> </execution> -->
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
