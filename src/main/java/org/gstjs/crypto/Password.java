@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
  *
  */
 public class Password {
-	private static ResourceBundle res = ResourceBundle.getBundle("org/gstjs/crypto/resources");
+	private static ResourceBundle res = ResourceBundle.getBundle("org.gstjs.crypto.resources");
 	private char[] wrappedPassword;
 	private boolean nulled;
 

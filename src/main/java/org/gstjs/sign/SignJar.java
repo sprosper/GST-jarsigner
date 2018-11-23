@@ -59,7 +59,7 @@ import org.apache.commons.cli.ParseException;
  */
 public class SignJar {
 
-	private static ResourceBundle res = ResourceBundle.getBundle("org/gstjs/sign/resources");
+	private static ResourceBundle res = ResourceBundle.getBundle("org.gstjs.sign.resources");
 
 	private File inputJarFile;
 	private File outputJarFile;

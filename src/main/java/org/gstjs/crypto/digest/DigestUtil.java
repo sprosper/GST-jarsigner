@@ -35,7 +35,7 @@ import org.gstjs.crypto.CryptoException;
  *
  */
 public final class DigestUtil {
-	private static ResourceBundle res = ResourceBundle.getBundle("org/gstjs/crypto/digest/resources");
+	private static ResourceBundle res = ResourceBundle.getBundle("org.gstjs.crypto.digest.resources");
 
 	private DigestUtil() {
 	}

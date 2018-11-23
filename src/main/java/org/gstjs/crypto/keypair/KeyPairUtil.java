@@ -58,7 +58,7 @@ import org.gstjs.crypto.KeyInfo;
  *
  */
 public final class KeyPairUtil {
-	private static ResourceBundle res = ResourceBundle.getBundle("org/gstjs/crypto/keypair/resources");
+	private static ResourceBundle res = ResourceBundle.getBundle("org.gstjs.crypto.keypair.resources");
 
 	private KeyPairUtil() {
 	}

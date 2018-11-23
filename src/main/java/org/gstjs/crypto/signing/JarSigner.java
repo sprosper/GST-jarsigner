@@ -79,7 +79,7 @@ import org.gstjs.utilities.io.CopyUtil;
  *
  */
 public class JarSigner {
-	private static ResourceBundle res = ResourceBundle.getBundle("org/gstjs/crypto/signing/resources");
+	private static ResourceBundle res = ResourceBundle.getBundle("org.gstjs.crypto.signing.resources");
 
 	private static final String CRLF = "\r\n";
 
