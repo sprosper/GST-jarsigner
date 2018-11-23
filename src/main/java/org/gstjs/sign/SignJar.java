@@ -248,8 +248,6 @@ public class SignJar {
 		File inputJarFile = null;
 		boolean test = false;
 
-		System.out.println("Sono in main!");
-
 		CommandLine commandLine;
 		
 		Option option_tsa = Option.builder("tsa").required(false).desc("TimeStamp URL").longOpt("tsa").numberOfArgs(1)
@@ -331,6 +329,8 @@ public class SignJar {
 			System.out.println(exception.getMessage());
 			System.exit(2);
 		}
+
+		System.out.println("Recupero chiave e certificato dal token ...");
 
 		Security.addProvider(new BouncyCastleProvider());
 		SunPKCS11 p = new sun.security.pkcs11.SunPKCS11(providerArg);
