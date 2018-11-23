@@ -365,7 +365,7 @@ public class SignJar {
 				.orderX509CertChain(X509CertUtil.convertCertificates(keyStore.getCertificateChain(alias)));
 		KeyPairType keyPairType = KeyPairUtil.getKeyPairType(privateKey);
 		
-		signatureName = alias.substring(0, 7);
+		signatureName = alias.substring(0, 8);
 		SignJar mySignJar = new SignJar(privateKey, keyPairType, signatureName);
 
 		SignatureType signatureType = mySignJar.getSignatureType();
