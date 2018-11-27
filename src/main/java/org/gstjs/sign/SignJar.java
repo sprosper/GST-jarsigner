@@ -257,6 +257,7 @@ public class SignJar {
 		Option option_storepass = Option.builder("storepass").required(true).desc("Password Token")
 				.longOpt("storepass").numberOfArgs(1).build();
 		Option option_test = Option.builder().required(false).desc("The test option").longOpt("test").build();
+		Option option_signaturename = Option.builder().required(false).desc("The signature name option").longOpt("signaturename").numberOfArgs(1).build();
 		
 		Options options = new Options();
 		CommandLineParser parser = new DefaultParser();
@@ -264,7 +265,8 @@ public class SignJar {
 		options.addOption(option_test);
 		options.addOption(option_tsa);
 		options.addOption(option_providerArg);
-		options.addOption(option_storepass);		
+		options.addOption(option_storepass);
+		options.addOption(option_signaturename);
 
 		try {
 			commandLine = parser.parse(options, args);
@@ -272,6 +274,12 @@ public class SignJar {
 			if (commandLine.hasOption("test")) {
 				System.out.println("Option test is present.  This is a flag option.");
 				test = true;
+			}
+
+			if (commandLine.hasOption("signaturename")) {
+				signatureName = commandLine.getOptionValue("signaturename");
+				if (test) System.out.print("signaturename is present.  The value is: ");
+				if (test) System.out.println(commandLine.getOptionValue("signaturename"));
 			}
 
 			if (commandLine.hasOption("tsa")) {
@@ -365,7 +373,9 @@ public class SignJar {
 				.orderX509CertChain(X509CertUtil.convertCertificates(keyStore.getCertificateChain(alias)));
 		KeyPairType keyPairType = KeyPairUtil.getKeyPairType(privateKey);
 		
-		signatureName = alias.substring(0, 8);
+		if ( signatureName == null ) {
+		  signatureName = alias.substring(0, 8);
+		}
 		SignJar mySignJar = new SignJar(privateKey, keyPairType, signatureName);
 
 		SignatureType signatureType = mySignJar.getSignatureType();
