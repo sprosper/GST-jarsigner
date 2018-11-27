@@ -283,19 +283,19 @@ public class JarSigner {
 	
 			// Signature file complete
 			byte[] sf = sbSf.toString().getBytes();
-	
-			// Write JAR files from JAR to be signed to signed JAR
-			writeJarEntries(jar, jos, signatureName);
-	
-			// Write manifest to signed JAR
-			writeManifest(manifest, jos);
-	
+
 			// Write signature file to signed JAR
 			writeSignatureFile(sf, signatureName, jos);
-	
+
 			// Create signature block and write it out to signed JAR
 			byte[] sigBlock = createSignatureBlock(sf, privateKey, certificateChain, signatureType, tsaUrl, provider);
 			writeSignatureBlock(sigBlock, signatureType, signatureName, jos);
+
+			// Write JAR files from JAR to be signed to signed JAR
+			writeJarEntries(jar, jos, signatureName);
+
+			// Write manifest to signed JAR
+			writeManifest(manifest, jos);
 		}
 	}
 
@@ -640,6 +640,7 @@ public class JarSigner {
 		// Signature file entry
 		JarEntry sfJarEntry = new JarEntry(MessageFormat.format(METAINF_FILE_LOCATION, signatureName, SIGNATURE_EXT)
 				.toUpperCase());
+		
 		jos.putNextEntry(sfJarEntry);
 
 		// Write content
@@ -671,9 +672,10 @@ public class JarSigner {
 			extension = RSA_SIG_BLOCK_EXT;
 		}
 
-		// Signature block entry
+		// Signature block entry	
 		JarEntry bkJarEntry = new JarEntry(MessageFormat.format(METAINF_FILE_LOCATION, signatureName, extension)
 				.toUpperCase());
+		
 		jos.putNextEntry(bkJarEntry);
 
 		// Write content

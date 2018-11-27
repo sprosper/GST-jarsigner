@@ -30,6 +30,12 @@ import java.text.MessageFormat;
 import java.util.ResourceBundle;
 import java.util.jar.JarFile;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.gstjs.crypto.CryptoException;
 import org.gstjs.crypto.digest.DigestType;
@@ -40,18 +46,7 @@ import org.gstjs.crypto.signing.SignatureType;
 import org.gstjs.crypto.x509.X509CertUtil;
 import org.gstjs.utilities.io.IOUtils;
 
-import iaik.pkcs.pkcs11.Module;
-import iaik.pkcs.pkcs11.Session;
-import iaik.pkcs.pkcs11.Slot;
 import sun.security.pkcs11.SunPKCS11;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.Option.Builder;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.ParseException;
 
 /**
  * Dialog that displays the presents JAR signing options.
