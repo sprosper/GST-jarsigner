@@ -40,41 +40,40 @@ taking a look to Oracle jarsigner code for the token interaction, and removing t
 
 This is a little example of use in maven:
 
+```xml
 ...
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<executions>
-					<execution>
-					<id>Sign ${project.artifactId}-${project.version} with certificate on token</id>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<phase>package</phase>
-						<configuration>
-							<executable>${java8.home}/bin/java</executable>
-							<arguments>
-								<argument>-jar</argument>
-								<argument>${signJar-jar}</argument>
-								<argument>-providerArg</argument>
-								<argument>${confirmatoken-configurationfile}</argument>
-								<argument>-tsa</argument>
-								<argument>${tsaUrl}</argument>
-								<argument>-storepass</argument>
-								<argument>${token-password}</argument>
-								<argument>target/${project.artifactId}-${project.version}.jar</argument>
-								<argument>${confirmatoken-alias}</argument>
-							</arguments>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-...
-
+<plugin>
+	<groupId>org.codehaus.mojo</groupId>
+	<artifactId>exec-maven-plugin</artifactId>
+	<executions>
+		<execution>
+		<id>Sign ${project.artifactId}-${project.version} with certificate on token</id>
+			<goals>
+				<goal>exec</goal>
+			</goals>
+			<phase>package</phase>
+			<configuration>
+				<executable>${java8.home}/bin/java</executable>
+				<arguments>
+					<argument>-jar</argument>
+					<argument>${signJar-jar}</argument>
+					<argument>-providerArg</argument>
+					<argument>${confirmatoken-configurationfile}</argument>
+					<argument>-tsa</argument>
+					<argument>${tsaUrl}</argument>
+					<argument>-storepass</argument>
+					<argument>${token-password}</argument>
+					<argument>target/${project.artifactId}-${project.version}.jar</argument>
+					<argument>${confirmatoken-alias}</argument>
+				</arguments>
+			</configuration>
+		</execution>
+	</executions>
+</plugin>
+ ...
+```
 
 I'm not a java expert and I went right to the result for my needs.
  
 So you will find a lot of "dirty" code :), but I can assure it works fine for the purpouse!
 
- 
