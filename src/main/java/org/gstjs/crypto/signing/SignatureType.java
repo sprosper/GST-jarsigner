@@ -67,7 +67,7 @@ public enum SignatureType {
 	SHA512_ECDSA("SHA512withECDSA", "1.2.840.10045.4.3.4", SHA512, "SignatureType.Sha512WithEcDsa");
 	// @formatter:on
 
-	private static ResourceBundle res = ResourceBundle.getBundle("org/gstjs/crypto/signing/resources");
+	private static ResourceBundle res = ResourceBundle.getBundle("org.gstjs.crypto.signing.resources");
 	private String jce;
 	private String oid;
 	private DigestType digestType;

@@ -63,7 +63,7 @@ import org.gstjs.utilities.pem.PemUtil;
  *
  */
 public final class X509CertUtil {
-	private static ResourceBundle res = ResourceBundle.getBundle("org/gstjs/crypto/x509/resources");
+	private static ResourceBundle res = ResourceBundle.getBundle("org.gstjs.crypto.x509.resources");
 	private static final String X509_CERT_TYPE = "X.509";
 	private static final String PKCS7_ENCODING = "PKCS7";
 	private static final String PKI_PATH_ENCODING = "PkiPath";

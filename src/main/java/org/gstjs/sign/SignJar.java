@@ -30,6 +30,12 @@ import java.text.MessageFormat;
 import java.util.ResourceBundle;
 import java.util.jar.JarFile;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.gstjs.crypto.CryptoException;
 import org.gstjs.crypto.digest.DigestType;
@@ -40,18 +46,7 @@ import org.gstjs.crypto.signing.SignatureType;
 import org.gstjs.crypto.x509.X509CertUtil;
 import org.gstjs.utilities.io.IOUtils;
 
-import iaik.pkcs.pkcs11.Module;
-import iaik.pkcs.pkcs11.Session;
-import iaik.pkcs.pkcs11.Slot;
 import sun.security.pkcs11.SunPKCS11;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.Option.Builder;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.ParseException;
 
 /**
  * Dialog that displays the presents JAR signing options.
@@ -59,7 +54,7 @@ import org.apache.commons.cli.ParseException;
  */
 public class SignJar {
 
-	private static ResourceBundle res = ResourceBundle.getBundle("org/gstjs/sign/resources");
+	private static ResourceBundle res = ResourceBundle.getBundle("org.gstjs.sign.resources");
 
 	private File inputJarFile;
 	private File outputJarFile;
@@ -248,8 +243,6 @@ public class SignJar {
 		File inputJarFile = null;
 		boolean test = false;
 
-		System.out.println("Sono in main!");
-
 		CommandLine commandLine;
 		
 		Option option_tsa = Option.builder("tsa").required(false).desc("TimeStamp URL").longOpt("tsa").numberOfArgs(1)
@@ -259,6 +252,7 @@ public class SignJar {
 		Option option_storepass = Option.builder("storepass").required(true).desc("Password Token")
 				.longOpt("storepass").numberOfArgs(1).build();
 		Option option_test = Option.builder().required(false).desc("The test option").longOpt("test").build();
+		Option option_signaturename = Option.builder().required(false).desc("The signature name option").longOpt("signaturename").numberOfArgs(1).build();
 		
 		Options options = new Options();
 		CommandLineParser parser = new DefaultParser();
@@ -266,7 +260,8 @@ public class SignJar {
 		options.addOption(option_test);
 		options.addOption(option_tsa);
 		options.addOption(option_providerArg);
-		options.addOption(option_storepass);		
+		options.addOption(option_storepass);
+		options.addOption(option_signaturename);
 
 		try {
 			commandLine = parser.parse(options, args);
@@ -274,6 +269,12 @@ public class SignJar {
 			if (commandLine.hasOption("test")) {
 				System.out.println("Option test is present.  This is a flag option.");
 				test = true;
+			}
+
+			if (commandLine.hasOption("signaturename")) {
+				signatureName = commandLine.getOptionValue("signaturename");
+				if (test) System.out.print("signaturename is present.  The value is: ");
+				if (test) System.out.println(commandLine.getOptionValue("signaturename"));
 			}
 
 			if (commandLine.hasOption("tsa")) {
@@ -332,6 +333,8 @@ public class SignJar {
 			System.exit(2);
 		}
 
+		System.out.println("Recupero chiave e certificato dal token ...");
+
 		Security.addProvider(new BouncyCastleProvider());
 		SunPKCS11 p = new sun.security.pkcs11.SunPKCS11(providerArg);
 		
@@ -365,7 +368,9 @@ public class SignJar {
 				.orderX509CertChain(X509CertUtil.convertCertificates(keyStore.getCertificateChain(alias)));
 		KeyPairType keyPairType = KeyPairUtil.getKeyPairType(privateKey);
 		
-		signatureName = alias.substring(0, 7);
+		if ( signatureName == null ) {
+		  signatureName = alias.substring(0, 8);
+		}
 		SignJar mySignJar = new SignJar(privateKey, keyPairType, signatureName);
 
 		SignatureType signatureType = mySignJar.getSignatureType();
