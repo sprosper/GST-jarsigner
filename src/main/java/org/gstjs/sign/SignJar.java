@@ -92,17 +92,10 @@ public class SignJar {
 
 	private void initComponents(String signatureName) throws CryptoException {
 
-		// inputJar="C:\\Users\\sprosper.NSPROSPER203503\\Desktop\\test.jar";
-		// outputJar="C:\\Users\\sprosper.NSPROSPER203503\\Desktop\\test_signed.jar";
 		this.signatureName = signatureName;
 
 		signatureType = SignatureType.SHA256_RSA;
 		digestType = DigestType.SHA256;
-
-		// inputJarFile = new File(inputJar);
-		// outputJarFile = new File(outputJar);
-
-		// tsaUrl="http://rfc3161timestamp.globalsign.com/advanced";
 	}
 
 	/**
